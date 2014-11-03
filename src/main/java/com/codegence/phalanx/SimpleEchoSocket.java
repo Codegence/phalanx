@@ -1,4 +1,21 @@
-package com.codegence.local_development_client;
+/*
+    Copyright (C) 2014  Gabriel Flores
+    This file is part of Codegence.
+
+    Codegence is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Codegence is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Codegence. If not, see <http://www.gnu.org/licenses/>.
+*/
+package com.codegence.phalanx;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -69,7 +86,7 @@ public class SimpleEchoSocket {
 				wr.write(  objectMapper.writeValueAsBytes(request.getPayload()) );
 			}
 			int responseCode = con.getResponseCode();
-		
+
 			CodegenceResonse codegenceResonse = new CodegenceResonse();
 			codegenceResonse.setStatus(responseCode);
 			codegenceResonse.setId(request.getId());
@@ -77,14 +94,14 @@ public class SimpleEchoSocket {
 			        new InputStreamReader(con.getInputStream()));
 			String inputLine;
 			StringBuffer responsePayload = new StringBuffer();
-	 
+
 			while ((inputLine = in.readLine()) != null) {
 				responsePayload.append(inputLine);
 			}
 			in.close();
 			codegenceResonse.setPayload(objectMapper.readValue( responsePayload.toString().getBytes(), Object.class) );
 			response = objectMapper.writeValueAsString(codegenceResonse);
-			
+
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (JsonParseException e) {
@@ -94,8 +111,8 @@ public class SimpleEchoSocket {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
+
+
 		try {
 			session.getRemote().sendString(response);
 		} catch (IOException e) {
